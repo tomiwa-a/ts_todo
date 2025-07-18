@@ -1,9 +1,9 @@
 import express, { Router } from "express";
 
-import Main from "../controllers/main";
 import { PoolClient } from "pg";
+import TaskController from "./task.controller";
 
-class MainRoutes {
+class TaskRoutes {
   private db;
 
   private router;
@@ -15,9 +15,10 @@ class MainRoutes {
 
     this.router = express.Router();
 
-    this.main = new Main(this.db);
+    this.main = new TaskController(this.db);
 
     this.router.get("/", this.main.getAll);
+    this.router.post("/", this.main.create);
   }
 
   getRouter() {
@@ -25,4 +26,4 @@ class MainRoutes {
   }
 }
 
-export default MainRoutes;
+export default TaskRoutes;

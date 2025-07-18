@@ -1,11 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import { Client, PoolClient } from "pg";
-import TaskService from "../services/taskService";
-import { NotFoundError } from "../utils/errors";
+import { CreateTaskDTO } from "./dto/create-task.dto";
+import TaskService from "./task.service";
+import { Responses } from "../../shared/utils/responses";
 
-import { Responses } from "../utils/responses";
-
-class Main {
+class TaskController {
   private db;
   private taskService;
 
@@ -27,9 +26,24 @@ class Main {
 
   public getSingle = () => {};
 
-  public create = () => {};
+  public create = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      let { name } = req.body;
+
+      if (!name) {
+        throw new Error("Name is required");
+      }
+
+      let createTask = new CreateTaskDTO(name);
+      let task = await this.taskService.create(createTask);
+      Responses.success(res, "Task created successfully", task);
+      return;
+    } catch (e) {
+      next(e);
+    }
+  };
 
   public update = () => {};
 }
 
-export default Main;
+export default TaskController;

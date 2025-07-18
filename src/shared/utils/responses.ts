@@ -1,4 +1,4 @@
-import MetadataDTO from "../dto/MetadataDTO";
+import MetadataDTO from "../dto/metadata.dto";
 import { Response } from "express";
 
 export const Responses = {

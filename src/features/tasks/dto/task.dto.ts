@@ -3,8 +3,8 @@ class TaskDTO {
     public id: number,
     public name: string,
     public completed: boolean,
-    public createdAt: Date,
-    public updatedAt: Date
+    public createdAt?: Date,
+    public updatedAt?: Date
   ) {}
 }
 
