@@ -1,24 +1,23 @@
 import { NextFunction, Request, Response } from "express";
 import { Client, PoolClient } from "pg";
+import TaskService from "../services/taskService";
 import { NotFoundError } from "../utils/errors";
 
-import TaskDAO from "../dao/TaskDAO";
 import { Responses } from "../utils/responses";
 
 class Main {
   private db;
-  private taskDAO;
+  private taskService;
 
   constructor(db: PoolClient) {
     this.db = db;
-    this.taskDAO = new TaskDAO(this.db);
+    this.taskService = new TaskService(db);
   }
 
+  //TODO: modify this, move code to services so it's more centralized.
   public getAll = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      console.log(this);
-      let tasks = await this.taskDAO.getAll();
-
+      let tasks = await this.taskService.getAll();
       Responses.success(res, "Tasks fetched successfully", tasks);
       return;
     } catch (e) {
@@ -27,6 +26,10 @@ class Main {
   };
 
   public getSingle = () => {};
+
+  public create = () => {};
+
+  public update = () => {};
 }
 
 export default Main;
