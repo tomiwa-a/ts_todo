@@ -1,19 +1,40 @@
 import { CacheInterface } from "../interfaces/cache.interface";
+import Redis from "ioredis";
 
 class RedisModule implements CacheInterface {
+  private publisher: Redis;
+  private subscriber: Redis;
+
   constructor() {
-    //TODO: connect to redis here.
+    this.publisher = new Redis({
+      host: "localhost",
+      port: 6379,
+    });
+
+    this.subscriber = new Redis({
+      host: "localhost",
+      port: 6379,
+    });
   }
 
-  get: (key: string) => Promise<any | null> = async (key: string) => {
+  get = async (key: string): Promise<any | null> => {
     return null;
   };
 
-  set: (key: string, value: any) => Promise<void> = async (
-    key: string,
-    value: any
-  ) => {
+  set = async (key: string, value: any): Promise<void> => {
     return;
+  };
+
+  publishToChannel = async (channel: string, data: any) => {
+    await this.publisher.publish(channel, JSON.stringify(data), (err) => {
+      throw err;
+    });
+  };
+
+  subscribeToChannel = async (channel: string) => {
+    await this.subscriber.subscribe(channel, (err, count) => {
+      throw err;
+    });
   };
 }
 
